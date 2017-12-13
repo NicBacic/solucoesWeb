@@ -2,6 +2,8 @@
 # Soluções Web
 Código fonte para o trabalho de soluções web 
 
+[![Build Status](https://travis-ci.org/NickBacic/solucoesWeb.svg?branch=master)](https://travis-ci.org/NickBacic/solucoesWeb)
+
 # Links importantes
 How to Integrate Google Maps into Ruby on Rails App: https://anadea.info/blog/how-to-integrate-google-maps-into-ruby-on-rails-app
 
