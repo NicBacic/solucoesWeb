@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+ - 2.2
+ - jruby
+ - 2.3.1p112
+
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS sptrans_test;'
+
+services:
+  - mysql
