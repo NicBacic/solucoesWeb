@@ -1,8 +1,6 @@
 language: ruby
 rvm:
  - 2.2
- - jruby
- - rbx-3
 
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS sptrans_test;'
