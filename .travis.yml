@@ -4,7 +4,7 @@ rvm:
 
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS sptrans_test;'
-  - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost';"
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON sptrans_test TO 'travis'@'%';"
 services:
   - mysql
 
