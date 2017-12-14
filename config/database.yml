@@ -29,7 +29,6 @@ test:
   adapter: mysql2
   database: sptrans_test
   username: travis
-  password: 123456
   encoding: utf8
 
 # As with config/secrets.yml, you never want to store sensitive information,
