@@ -7,7 +7,7 @@ RSpec.describe "stops/edit", type: :view do
       :stop_name => "MyString",
       :stop_desc => "MyString",
       :stop_lat => 1,
-      :stop_lon => 1
+      :stop_long => 1
     ))
   end
 
@@ -24,7 +24,7 @@ RSpec.describe "stops/edit", type: :view do
 
       assert_select "input[name=?]", "stop[stop_lat]"
 
-      assert_select "input[name=?]", "stop[stop_lon]"
+      assert_select "input[name=?]", "stop[stop_long]"
     end
   end
 end
