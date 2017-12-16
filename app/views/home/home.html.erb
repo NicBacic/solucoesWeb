@@ -9,18 +9,19 @@
     </style>
   </head>
   <body>
+    <%= csrf_meta_tags %>
     <h2>Endereço</h2>
-    <form action="/onibus" method="post">
+    <form action="/" method="get">
     <div>
         <input type="text" id="endereco" />
     </div>
     
     <h3>Mapa</h3>
     <div id="map"></div>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_pyC0IRqzy6HspOwoYLg2OY-ohMgKC4c&callback=initMap">
-    </script>
-    
+
+      <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_pyC0IRqzy6HspOwoYLg2OY-ohMgKC4c&callback=initMap">
+      </script>
 
   </body>
 </html>

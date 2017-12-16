@@ -9,7 +9,7 @@
       <th>Stop name</th>
       <th>Stop desc</th>
       <th>Stop lat</th>
-      <th>Stop lon</th>
+      <th>Stop long</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -21,7 +21,7 @@
         <td><%= stop.stop_name %></td>
         <td><%= stop.stop_desc %></td>
         <td><%= stop.stop_lat %></td>
-        <td><%= stop.stop_lon %></td>
+        <td><%= stop.stop_long %></td>
         <td><%= link_to 'Show', stop %></td>
         <td><%= link_to 'Edit', edit_stop_path(stop) %></td>
         <td><%= link_to 'Destroy', stop, method: :delete, data: { confirm: 'Are you sure?' } %></td>

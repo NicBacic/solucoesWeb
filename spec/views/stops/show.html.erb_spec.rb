@@ -7,7 +7,7 @@ RSpec.describe "stops/show", type: :view do
       :stop_name => "Stop Name",
       :stop_desc => "Stop Desc",
       :stop_lat => 3,
-      :stop_lon => 4
+      :stop_long => 4
     ))
   end
 

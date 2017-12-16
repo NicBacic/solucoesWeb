@@ -29,7 +29,7 @@ test:
   <<: *default
   adapter: mysql2
   database: sptrans_test
-  username: travis
+  username: root
   encoding: utf8
 
 # As with config/secrets.yml, you never want to store sensitive information,

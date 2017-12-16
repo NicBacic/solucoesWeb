@@ -1,14 +1,9 @@
 class HomeController < ApplicationController
+  #skip_before_filter :verify_authenticity_token, :only => [:home]
 
   def home
   end
 
-  def help
-  end
-
-  def about
-  end
-
-  def search
+  def enderecos
   end
 end
