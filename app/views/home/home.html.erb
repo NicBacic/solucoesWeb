@@ -11,10 +11,22 @@
   <body>
     <%= csrf_meta_tags %>
     <h2>Endereço</h2>
-    <form action="/" method="get">
     <div>
         <input type="text" id="endereco" />
     </div>
+
+
+    <form>
+      <select name="options" onchange="busOptions(this.value)">
+      <option value="">Select a Option:</option>
+      <option value="1">Bus Stops</option>
+      <option value="2">Routes</option>
+      </select>
+    </form>
+
+    <%= content_tag "div", id: "stops", data: {stops: Stop.all} do %>
+    <% end %>
+
     
     <h3>Mapa</h3>
     <div id="map"></div>
