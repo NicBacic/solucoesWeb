@@ -2,6 +2,8 @@
 
   var handleLocationError, initMap, map;
 
+  var markersArray = [];
+
   handleLocationError = void 0;
 
   initMap = void 0;
@@ -51,6 +53,8 @@
           map: map
         });
 
+        markersArray.push(marker);
+
         //Then we call handleLocationError if the browser doesn't support geolocation. This function shows the user this information.
       }), function() {
         handleLocationError(true, infoWindow, map.getCenter());
@@ -71,35 +75,23 @@
 
 //Now, if bus options is selected, then, for each bus stop in determined ratio, we add a marker in the map.
   function busOptions(str){
+      console.log("Option " + str + " selected");
       if (str == "") {
-        clearOverlays(); //clear marks
-        return;
+        deleteMarkers(); //clear marks
       } else { 
-        
-        
-
-        //console.log("Stops length = " + stops.length)
-
 
         if (str == "1"){
-        
+          deleteMarkers();
           var stops = $('#stops').data('stops');
-          var markersArray = new Array(stops.length);
 
           for(var i = 0; i < stops.length; i++){
-              markersArray[i] = 
+              marker = 
                 {
                   coords:{lat:stops[i].stop_lat,lng:stops[i].stop_long},
-                  content:'<h2>Bus Stop 1</h2>'
+                  //content:'<h2>Bus Stop 1</h2>'
                 };
-              
-              console.log(i)
-          }
-
-          // Loop through markers
-          for(var i = 0;i < markersArray.length;i++){
-            // Add marker
-            addMarker(markersArray[i]);
+              addMarker(marker);
+              console.log(i);
           }
 
           // Add Marker Function
@@ -111,7 +103,7 @@
             });
 
             // Check for customicon
-            if(props.iconImage){
+            /*if(props.iconImage){
               // Set icon image
               marker.setIcon(props.iconImage);
             }
@@ -125,18 +117,88 @@
               marker.addListener('click', function(){
                 infoWindow.open(map, marker);
               });
-            } // end if props
+            }  end if props*/
+
+            markersArray.push(marker);
           } //end function add marker
         }// end if
-      } // end else
-    } //end function busOptions
+
+      else {
+        deleteMarkers();
+      }
+    } // end else
+  } //end function busOptions
 
 
-  /*Clear all Marks (NOT CURRENT WORKING)
-  function clearOverlays() {
-    for (var i = 0; i < markersArray.length; i++ ) {
-      markersArray[i].setMap(null);
+ function clearMarkers() {
+   setMapOnAll(null);
+ }
+
+ function deleteMarkers() {
+   clearMarkers();
+   markersArray = [];
+   
+ }
+
+  function setMapOnAll(map) {
+    //console.log("Delete Markers. Size = " + markersArray.length);
+    for (var i = 0; i < markersArray.length; i++) {
+      markersArray[i].setMap(map);
     }
-    markersArray.length = 0;
-  }*/
+  }
+
+
+  function searchAddress(){
+    var input = document.getElementById('endereco');
+    var searchBox = new google.maps.places.SearchBox(input);
+    
+    deleteMarkers();
+
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', function() {
+      var places = searchBox.getPlaces();
+
+      if (places.length == 0) {
+        return;
+      }
+
+      // Clear out the old markers.
+      deleteMarkers();
+
+      // For each place, get the icon, name and location.
+      var bounds = new google.maps.LatLngBounds();
+      places.forEach(function(place) {
+        if (!place.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+        var icon = {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        // Create a marker for each place.
+        markersArray.push(new google.maps.Marker({
+          map: map,
+          icon: icon,
+          title: place.name,
+          position: place.geometry.location
+        }));
+
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      }); //end function bounds
+
+      map.fitBounds(bounds);
+    });//end searchBox Listener
+
+  }//end searchAddress Function
 

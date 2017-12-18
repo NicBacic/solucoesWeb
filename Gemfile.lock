@@ -234,6 +234,8 @@ GEM
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
     shellany (0.0.1)
+    spbus (0.0.7)
+      nokogiri
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -291,6 +293,7 @@ DEPENDENCIES
   rspec-rails (~> 3.6)
   sass-rails (~> 5.0)
   selenium-webdriver
+  spbus
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
