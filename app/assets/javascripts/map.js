@@ -76,12 +76,13 @@
 //Now, if bus options is selected, then, for each bus stop in determined ratio, we add a marker in the map.
   function busOptions(str){
       console.log("Option " + str + " selected");
+      deleteMarkers();
       if (str == "") {
-        deleteMarkers(); //clear marks
+        console.log("Clearing Marks..."); //clear marks
       } else { 
 
         if (str == "1"){
-          deleteMarkers();
+          
           var stops = $('#stops').data('stops');
 
           for(var i = 0; i < stops.length; i++){
@@ -124,7 +125,7 @@
         }// end if
 
       else {
-        deleteMarkers();
+        console.log("Option " + str + " selected");
       }
     } // end else
   } //end function busOptions
