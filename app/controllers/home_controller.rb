@@ -1,11 +1,14 @@
 require 'httpclient'
 
 class HomeController < ApplicationController
-    #Um cliente ruby para a API Olho Vivo
+  before_action do 
+    auth("d096d3a782f6679cd3c1677e9cc7a93c2e453af99706b97474bb85b27d84896c")
+  end
 
-  session = HTTPClient.new
-  session.debug_dev = STDOUT
-  url = 'http://api.olhovivo.sptrans.com.br/v2.1/'
+  $session = HTTPClient.new
+  $session.debug_dev = STDOUT
+  $session.set_cookie_store('app/controllers/cookies/cookie.dat')
+  $url = 'http://api.olhovivo.sptrans.com.br/v2.1/'
 
   def auth(token)
 
@@ -18,12 +21,18 @@ class HomeController < ApplicationController
 
 
     method = "Login/Autenticar?token=" + token.to_s
-    response = session.post(url + method)
+    response = $session.post($url, method)
+    $session.save_cookie_store
 
-    if response.cookies
-        return true
+    puts "Session posted, waiting for response..."
+
+    if response.status == 200
+      puts "Response Accecpted"
+      #get_all_bus_position
+      return true
     end
-
+    
+    puts "Response Rejected"
     return false
 
   end
@@ -32,10 +41,9 @@ class HomeController < ApplicationController
 
     #HTTP GET comum para os demais métodos
 
-    response = session.get(url + path)
-    data = response.json()
-    return data
-
+    response = $session.get_content($url,path)
+    return response
+    
   end
 
   def search_by_bus(term)
@@ -101,6 +109,14 @@ class HomeController < ApplicationController
     #das linhas que atendem ao ponto de parada informado.
 
    return self._get("Previsao/Parada?codigoParada=" + stop_id.to_s)
+
+  end
+
+  def get_all_bus_position
+    
+    #Retorna uma lista com TODOS os ônibus (da sptrans) em movimento no momento em que o método foi chamado.
+    
+    return get("Posicao")
 
   end
 

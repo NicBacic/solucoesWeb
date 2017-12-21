@@ -15,7 +15,9 @@
     var infoWindow;
     infoWindow = void 0;
 
-    //Create map with 17 zoom centered in São Paulo
+    //Create map with 17 zoom centered in São Paulo. If you wish to change the place, just change lat and lng for the
+    //place you like. And if you want a blank map, or a custom map, look at google maps API here:
+    // https://developers.google.com/maps/documentation/javascript/maptypes?hl=en#CustomMapTypes
     map = new google.maps.Map(document.getElementById('map'), {
       center: {
         lat: -23.5489,
@@ -73,14 +75,24 @@
     infoWindow.setContent(browserHasGeolocation ? 'Erro: O serviço de Geolocalização falhou.' : 'Erro: Seu browser ou dispositivo não suportam essa funcionalidade');
   };
 
-//Now, if bus options is selected, then, for each bus stop in determined ratio, we add a marker in the map.
+/*Now, if bus options is selected, then, for each bus stop in determined ratio, we add a marker in the map.
+/*The Current method get every bus stop or moving bus and create a google maps marker for each one.
+/*If you want to do small searches, due to performance issues, it's better to provide specific ratio
+/* and create markers just for busses in it.*/
+
   function busOptions(str){
       console.log("Option " + str + " selected");
       deleteMarkers();
+
+      //No Option Selected, just clear the current marks
       if (str == "") {
         console.log("Clearing Marks..."); //clear marks
       } else { 
 
+
+        /* Option "Bus Stops"
+        /* We use the recovered data from GFHS saved in Stops Model and
+        /* Then we use Lat and Long from each bus stop to create a marker for them */
         if (str == "1"){
           
           var stops = $('#stops').data('stops');
@@ -89,7 +101,7 @@
               marker = 
                 {
                   coords:{lat:stops[i].stop_lat,lng:stops[i].stop_long},
-                  //content:'<h2>Bus Stop 1</h2>'
+                  //content: If you wish, you could put bus ID or some stuff like that here.
                 };
               addMarker(marker);
               console.log(i);
@@ -100,9 +112,14 @@
             var marker = new google.maps.Marker({
               position:props.coords,
               map:map,
-              //icon:props.iconImage
+              //icon:props.iconImage //Custom Icon image. You can use whatever you want, I will stay with default icon
             });
 
+            /*If you wish to customize your icons, put some content
+              or add some listener, you should use the code below.*/
+            
+
+            /*##################################################################################################*/
             // Check for customicon
             /*if(props.iconImage){
               // Set icon image
@@ -119,9 +136,13 @@
                 infoWindow.open(map, marker);
               });
             }  end if props*/
+            /*##################################################################################################*/
 
+
+            //After creating your marker we should add it to the markers Array
             markersArray.push(marker);
-          } //end function add marker
+
+          } //end function addmarker()
         }// end if
 
       else {
@@ -142,7 +163,7 @@
  }
 
   function setMapOnAll(map) {
-    //console.log("Delete Markers. Size = " + markersArray.length);
+    //console.log("Delete Markers. Size = " + markersArray.length); //Debug code
     for (var i = 0; i < markersArray.length; i++) {
       markersArray[i].setMap(map);
     }
