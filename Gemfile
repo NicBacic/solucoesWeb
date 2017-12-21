@@ -26,6 +26,8 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'jquery-rails'
 
+gem 'httpclient'
+
 
 group :development, :test do
   

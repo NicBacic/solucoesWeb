@@ -11,16 +11,27 @@
   <body>
     <%= csrf_meta_tags %>
     <h2>Endereço</h2>
-    <form action="/" method="get">
     <div>
-        <input type="text" id="endereco" />
+        <input id="endereco" class="controls" type="text" placeholder="" onchange="searchAddress()">
     </div>
+
+    <form>
+      <select name="options" onchange="busOptions(this.value)">
+      <option value="">Selecione uma Opção:</option>
+      <option value="1">Parada de Ônibus</option>
+      <option value="2">Ônibus em movimento</option>
+      </select>
+    </form>
+
+    <%= content_tag "div", id: "stops", data: {stops: Stop.all} do %>
+    <% end %>
+
     
     <h3>Mapa</h3>
     <div id="map"></div>
 
       <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_pyC0IRqzy6HspOwoYLg2OY-ohMgKC4c&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_pyC0IRqzy6HspOwoYLg2OY-ohMgKC4c&libraries=places&callback=initMap">
       </script>
 
   </body>
