@@ -2,9 +2,6 @@ language: ruby
 rvm:
  - 2.2
 
-before_install:
-  - mysql -u root -e 'CREATE DATABASE IF NOT EXISTS mydb;'
-  - mysql -u root -e "GRANT ALL PRIVILEGES ON mydb.* TO 'travis'@'%';"
 services:
   - mysql
 

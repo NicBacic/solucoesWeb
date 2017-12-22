@@ -120,6 +120,11 @@
         console.log("Option 2 Selected");
         get_all_bus_position();
 
+        // Show Update Button
+        $("#optionsBus").change(function () {
+          $("#buttonBus").toggle(!isNaN(+$(this).val()));
+        });
+
       } // end elsif
     } // end else
   } //end function busOptions
@@ -304,4 +309,9 @@
     });//end searchBox Listener
 
   }//end searchAddress Function
+
+  function updateBusPosition(){
+    deleteMarkers();
+    get_all_bus_position();
+  }
 
