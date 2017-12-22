@@ -1,4 +1,5 @@
 require 'httpclient'
+require 'json'
 
 class HomeController < ApplicationController
   before_action do 
@@ -21,7 +22,8 @@ class HomeController < ApplicationController
 
 
     method = "Login/Autenticar?token=" + token.to_s
-    response = $session.post($url, method)
+    body = { 'keyword' => 'ruby', 'lang' => 'pt-br' }
+    response = $session.post($url + method, body)
     $session.save_cookie_store
 
     puts "Session posted, waiting for response..."
@@ -40,10 +42,12 @@ class HomeController < ApplicationController
   def get(path)
 
     #HTTP GET comum para os demais métodos
-
-    response = $session.get_content($url,path)
-    return response
-    
+    puts "Searching for Content"
+    @response = $session.get_content($url + path)
+    render :json => {
+                            :file_content => @response
+                    }
+    #puts @response
   end
 
   def search_by_bus(term)
@@ -108,7 +112,7 @@ class HomeController < ApplicationController
     #Retorna uma lista com a previsão de chegada dos veículos de cada uma
     #das linhas que atendem ao ponto de parada informado.
 
-   return self._get("Previsao/Parada?codigoParada=" + stop_id.to_s)
+   return get("Previsao/Parada?codigoParada=" + stop_id.to_s)
 
   end
 
@@ -116,7 +120,7 @@ class HomeController < ApplicationController
     
     #Retorna uma lista com TODOS os ônibus (da sptrans) em movimento no momento em que o método foi chamado.
     
-    return get("Posicao")
+    get("Posicao")
 
   end
 
