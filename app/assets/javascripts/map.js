@@ -26,10 +26,10 @@
       zoom: 17
     }); //end map creation
 
-    //InfoWindow is used to popup a message in a marker
+    /*InfoWindow is used to popup a message in a marker
     infoWindow = new google.maps.InfoWindow({
       map: map
-    });
+    });*/
 
     //If browser has a Geolocator, than we set the center of the map in its location
     if (navigator.geolocation) {
@@ -44,9 +44,12 @@
           lng: position.coords.longitude
         };
 
-        //Change maps center position
+        /* Info Window
         infoWindow.setPosition(pos);
         infoWindow.setContent('Localização encontrada');
+        */
+
+        //Change maps center position
         map.setCenter(pos);
 
         //Set a marker in it position
@@ -71,17 +74,20 @@
 
 
   handleLocationError = function(browserHasGeolocation, infoWindow, pos) {
+    infoWindow = new google.maps.InfoWindow({
+      map: map
+    });
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ? 'Erro: O serviço de Geolocalização falhou.' : 'Erro: Seu browser ou dispositivo não suportam essa funcionalidade');
   };
 
-/*Now, if bus options is selected, then, for each bus stop in determined ratio, we add a marker in the map.
-/*The Current method get every bus stop or moving bus and create a google maps marker for each one.
-/*If you want to do small searches, due to performance issues, it's better to provide specific ratio
-/* and create markers just for busses in it.*/
+  /*Now, if bus options is selected, then, for each bus stop in determined ratio, we add a marker in the map.
+  /*The Current method get every bus stop or moving bus and create a google maps marker for each one.
+  /*If you want to do small searches, due to performance issues, it's better to provide specific ratio
+  /* and create markers just for busses in it.*/
 
   function busOptions(str){
-      console.log("Option " + str + " selected");
+      //console.log("Option " + str + " selected");
       deleteMarkers();
 
       //No Option Selected, just clear the current marks
@@ -104,25 +110,84 @@
                   //content: If you wish, you could put bus ID or some stuff like that here.
                 };
               addMarker(marker);
-              console.log(i);
+              //console.log(i);
           }
 
-          // Add Marker Function
-          function addMarker(props){
-            var marker = new google.maps.Marker({
-              position:props.coords,
-              map:map,
-              //icon:props.iconImage //Custom Icon image. You can use whatever you want, I will stay with default icon
-            });
+        }// end if
 
-            /*If you wish to customize your icons, put some content
-              or add some listener, you should use the code below.*/
+
+      /*Create a Mark for each moving bus and renders it in the map*/
+      else {
+        console.log("Option 2 Selected");
+        get_all_bus_position();
+      }
+    } // end else
+  } //end function busOptions
+
+
+
+  /*GET Posicao return a json with the following content
+  {
+    "hr": "11:30",
+    "l": [
+      {
+        "c": "5015-10",
+        "cl": 33887,
+        "sl": 2,
+        "lt0": "METRÔ JABAQUARA",
+        "lt1": "JD. SÃO JORGE",
+        "qv": 1,
+        "vs": [
+          {
+            "p":68021,
+            "a":true,
+            "ta":"2017-05-12T14:30:37Z",
+            "py":-23.678712500000003,
+            "px":-46.65674
+          }
+        ]
+      }
+    ]
+  }*/
+
+  function get_all_bus_position(){
+    $.ajax({
+          url: 'home/get_all_bus_position',
+          type: 'GET',    
+          dataType: 'json',
+          success: function (data) {
+            if (data.file_content == null) {
+              alert('Nenhum ônibus em movimento no momento. Clique em atualizar em alguns minutos');
+              return;
+            }
+            var bus = data.file_content;
+            
+            console.log(bus[0]);
+            
+          },
+          error: function () {
+            alert('error');
+          }
+    }); 
+  }  
+
+
+ // Add Marker Function
+  function addMarker(props){
+    var marker = new google.maps.Marker({
+      position:props.coords,
+      map:map,
+      //icon:props.iconImage //Custom Icon image. You can use whatever you want, I will stay with default icon
+    });
+
+    /*If you wish to customize your icons, put some content
+    or add some listener, you should use the code below.*/
             
 
-            /*##################################################################################################*/
-            // Check for customicon
-            /*if(props.iconImage){
-              // Set icon image
+    /*##################################################################################################*/
+    // Check for customicon
+    /*if(props.iconImage){
+            // Set icon image
               marker.setIcon(props.iconImage);
             }
 
@@ -136,21 +201,13 @@
                 infoWindow.open(map, marker);
               });
             }  end if props*/
-            /*##################################################################################################*/
+    /*##################################################################################################*/
 
 
-            //After creating your marker we should add it to the markers Array
-            markersArray.push(marker);
+    //After creating your marker we should add it to the markers Array
+    markersArray.push(marker);
 
-          } //end function addmarker()
-        }// end if
-
-      else {
-        console.log("Option " + str + " selected");
-      }
-    } // end else
-  } //end function busOptions
-
+ } //end function addmarker()
 
  function clearMarkers() {
    setMapOnAll(null);
