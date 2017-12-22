@@ -47,7 +47,6 @@ class HomeController < ApplicationController
     render :json => {
                             :file_content => @response
                     }
-    #puts @response
   end
 
   def search_by_bus(term)

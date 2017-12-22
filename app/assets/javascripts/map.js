@@ -111,16 +111,21 @@
                 };
               addMarker(marker);
               //console.log(i);
-          }
+          }//end for
 
-        }// end if
+        } else { 
+        
+        /*Create a Mark for each moving bus and renders it in the map*/
 
-
-      /*Create a Mark for each moving bus and renders it in the map*/
-      else {
         console.log("Option 2 Selected");
         get_all_bus_position();
-      }
+
+        // Show Update Button
+        $("#optionsBus").change(function () {
+          $("#buttonBus").toggle(!isNaN(+$(this).val()));
+        });
+
+      } // end elsif
     } // end else
   } //end function busOptions
 
@@ -151,24 +156,47 @@
   }*/
 
   function get_all_bus_position(){
-    $.ajax({
+
+    $( document ).ready(function() {
+      $.ajax({
           url: 'home/get_all_bus_position',
           type: 'GET',    
           dataType: 'json',
-          success: function (data) {
-            if (data.file_content == null) {
+          success: function (value, data) {
+            console.log(data);
+            if (value == null) {
               alert('Nenhum ônibus em movimento no momento. Clique em atualizar em alguns minutos');
               return;
             }
-            var bus = data.file_content;
+  
+            var lat, long, i, j = 0;
+            var numBus = "";
             
-            console.log(bus[0]);
+            var horario = $.parseJSON(value.file_content);
+            for(i = 0; i < horario.l.length; i++){
+              numBus = horario.l[i].c;
+              for(j = 0; j < horario.l[i].vs.length; j++){
+                long = horario.l[i].vs[j].px;
+                lat = horario.l[i].vs[j].py;
+               
+                marker = 
+                {
+                  coords:{lat: lat, lng:long},
+                  icon: 'https://fonts.googleapis.com/icon?family=directions_bus',
+                  content: numBus//content: If you wish, you could put bus ID or some stuff like that here.
+                };
+                addMarker(marker);
+                //console.log("I = " + i + " J = " + j);
+                }//end for j
+              } //end for i
+       
             
           },
           error: function () {
             alert('error');
           }
-    }); 
+      }); 
+    });
   }  
 
 
@@ -176,31 +204,32 @@
   function addMarker(props){
     var marker = new google.maps.Marker({
       position:props.coords,
-      map:map,
-      //icon:props.iconImage //Custom Icon image. You can use whatever you want, I will stay with default icon
+      map:map
     });
+    
 
     /*If you wish to customize your icons, put some content
     or add some listener, you should use the code below.*/
             
 
     /*##################################################################################################*/
-    // Check for customicon
-    /*if(props.iconImage){
-            // Set icon image
-              marker.setIcon(props.iconImage);
-            }
+    // Check for customization
+    if(props.iconImage){
+      // Set icon image
+      marker.setIcon(props.iconImage);
+    }
 
-            // Check content
-            if(props.content){
-              var infoWindow = new google.maps.InfoWindow({
-                content:props.content
-              });
+    //Check content
+    if(props.content){
+      var infoWindow = new google.maps.InfoWindow({
+        content:props.content
+      });
 
-              marker.addListener('click', function(){
-                infoWindow.open(map, marker);
-              });
-            }  end if props*/
+      marker.addListener('click', function(){
+        infoWindow.open(map, marker);
+      }); 
+
+    } // end if props.content
     /*##################################################################################################*/
 
 
@@ -280,4 +309,9 @@
     });//end searchBox Listener
 
   }//end searchAddress Function
+
+  function updateBusPosition(){
+    deleteMarkers();
+    get_all_bus_position();
+  }
 
