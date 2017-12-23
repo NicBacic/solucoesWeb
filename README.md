@@ -7,7 +7,7 @@ Nicolas Bacic Lima : 9277617
 Lucas de Sá :
 Gustavo : 
 
-# Informações Importante
+# Informações Importantes
 Esse projeto foi desenvolvido utilizando a linguagem Ruby atráves de Rails. O código principal, entretanto, deve ser conferido no arquivo map.js que pode ser localizado no caminho app/assets/javascripts
 
 O rails recomenda escrever código javascript utilizando o CoffeeScript (http://coffeescript.org/) mas, para esse trabalho, desenvolvemos diretamente em javascript.
