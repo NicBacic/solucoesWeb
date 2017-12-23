@@ -6,8 +6,6 @@
 
   var markersStop = [];
 
-  var markersArray = [];
-
   var searchMarkers = [];
 
   handleLocationError = void 0;
@@ -29,6 +27,7 @@
     //Create map with 17 zoom centered in São Paulo. If you wish to change the place, just change lat and lng for the
     //place you like. And if you want a blank map, or a custom map, look at google maps API here:
     // https://developers.google.com/maps/documentation/javascript/maptypes?hl=en#CustomMapTypes
+
     map = new google.maps.Map(document.getElementById('map'), {
       center: {
         lat: -23.5489,
@@ -190,6 +189,10 @@
               alert('Ocorreu um erro ao retornar os ônibus em movimento. Tente novamente em alguns segundos');
               return;
             }
+            var loc = window.location.pathname;
+            var dir = loc.substring(0, loc.lastIndexOf('/'));
+
+            console.log(loc);
             for(i = 0; i < horario.l.length; i++){
               numBus = horario.l[i].c;
               for(j = 0; j < horario.l[i].vs.length; j++){
@@ -199,7 +202,7 @@
                 marker = 
                 {
                   coords:{lat: lat, lng:long},
-                  icon: 'https://fonts.googleapis.com/icon?family=directions_bus',
+                  iconImage: "/assets/bus.png",
                   content: numBus
                 };
 
