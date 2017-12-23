@@ -18,16 +18,6 @@ ActiveRecord::Schema.define(version: 20171220211903) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "stop_times", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "trip_id"
-    t.time "arrival_time"
-    t.time "departure_time"
-    t.integer "stop_id"
-    t.integer "stop_sequence"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "stops", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "stop_id"
     t.string "stop_name"
