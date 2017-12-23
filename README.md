@@ -18,7 +18,7 @@ Esse trabalho visa disponibilizar uma plataforma para que o usuário possa pesqu
 
 Para testes, a princípio, estávamos utilizando a plataforma Travis para validação. Contudo, encontramos certa dificuldade em integrar o Travis com o MySQL, portanto desistimos dele.
 
-Existe um problema nesse trabalho devido a API da SPTrans ser HTTP enquanto que o serviço de geolocalização da Google só funciona em servidores seguros. Devido a isso, pode ser que no navegador que utilize o serviço de geolocalização não esteja disponível, visto que nosso servidor é HTTP. LocalHost é considerado endereço seguro, portanto, localmente, tudo funciona de acordo. Para rodar uma aplicação rails localmente basta executar o comando
+Existe um problema nesse trabalho devido a API da SPTrans ser HTTP enquanto que o serviço de geolocalização da Google só funciona em servidores seguros. Devido a isso, pode ser que no navegador que utilize, o serviço de geolocalização não esteja disponível visto que nosso servidor é HTTP. LocalHost é considerado endereço seguro, portanto, localmente, tudo funciona de acordo. Para rodar uma aplicação rails localmente basta executar o comando
 
 rails s
 
