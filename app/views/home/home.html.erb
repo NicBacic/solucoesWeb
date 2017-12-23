@@ -8,11 +8,13 @@
        }
     </style>
   </head>
+
+
   <body>
     <%= csrf_meta_tags %>
     <h2>Endereço</h2>
-    <div>
-        <input id="endereco" class="controls" type="text" placeholder="" onchange="searchAddress()">
+    <div id = "search">
+        <input id="endereco" class="controls" type="text" placeholder="Digite o endereço aqui" onKeyPress="searchAddress()">
     </div>
 
     <form action="">
