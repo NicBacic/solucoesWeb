@@ -5,7 +5,7 @@ Código fonte para o trabalho de soluções web
 # Integrantes
 Nicolas Bacic Lima : 9277617
 
-Lucas de Sá :
+Lucas de Sá : 9277534
 
 Gustavo : 
 
