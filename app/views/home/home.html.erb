@@ -15,27 +15,23 @@
         <input id="endereco" class="controls" type="text" placeholder="" onchange="searchAddress()">
     </div>
 
-    <form>
-      <select div="options_bus" name="options" id = "optionsBus" onchange="busOptions(this.value)">
-      <option value="">Selecione uma Opção:</option>
-      <option value="1">Parada de Ônibus</option>
-      <option value="2">Ônibus em movimento</option>
-     
-      </select>
+    <form action="">
+      <input type="checkbox" id= "moving_bus" name= "sptrans" value="1" onclick= "movingBus()">Ônibus em Movimento<br>
+      <input type="checkbox" id= "bus_stopped" name="sptrans" value="2" onClick= "busStopped()">Parada de Ônibus
     </form>
 
     <%= content_tag "div", id: "stops", data: {stops: Stop.all} do %>
     <% end %>
 
     
-    <h3>Mapa</h3>
+    <h2>Mapa</h2>
     <div id="map"></div>
 
       <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_pyC0IRqzy6HspOwoYLg2OY-ohMgKC4c&libraries=places&callback=initMap">
       </script>
 
-    <input name="updateBusPosition" type='button' id="buttonBus" value='Atualizar' onclick = "updateBusPosition()" />
+    <input name="updateBusPosition" type='submit' id="button_bus" value='Atualizar' onclick = "updateBusPosition()" />
 
   </body>
 </html>
