@@ -2,9 +2,16 @@
 
   var handleLocationError, initMap, map;
 
-  var markersArray = [];
+  var markersBus = [];
+
+  var markersStop = [];
+
+  var searchMarkers = [];
 
   handleLocationError = void 0;
+
+  var $submit;
+  
 
   initMap = void 0;
 
@@ -12,12 +19,15 @@
 
   //Function called once app is started. It creates Google Map with GeoLocation
   initMap = function() {
+    hideComponents(); //Hide Some components
+
     var infoWindow;
     infoWindow = void 0;
 
     //Create map with 17 zoom centered in São Paulo. If you wish to change the place, just change lat and lng for the
     //place you like. And if you want a blank map, or a custom map, look at google maps API here:
     // https://developers.google.com/maps/documentation/javascript/maptypes?hl=en#CustomMapTypes
+
     map = new google.maps.Map(document.getElementById('map'), {
       center: {
         lat: -23.5489,
@@ -58,7 +68,7 @@
           map: map
         });
 
-        markersArray.push(marker);
+        searchMarkers.push(marker);
 
         //Then we call handleLocationError if the browser doesn't support geolocation. This function shows the user this information.
       }), function() {
@@ -78,7 +88,7 @@
       map: map
     });
     infoWindow.setPosition(pos);
-    infoWindow.setContent(browserHasGeolocation ? 'Erro: O serviço de Geolocalização falhou.' : 'Erro: Seu browser ou dispositivo não suportam essa funcionalidade');
+    infoWindow.setContent(browserHasGeolocation ? 'Erro: O serviço de Geolocalização falhou. Verifique se o domínio é seguro' : 'Erro: Seu browser ou dispositivo não suportam essa funcionalidade');
   };
 
   /*Now, if bus options is selected, then, for each bus stop in determined ratio, we add a marker in the map.
@@ -86,50 +96,51 @@
   /*If you want to do small searches, due to performance issues, it's better to provide specific ratio
   /* and create markers just for busses in it.*/
 
-  function busOptions(str){
-      //console.log("Option " + str + " selected");
-      deleteMarkers();
+  function hideComponents(){
+    $(document).ready(function() {
+    
+       $submit = $("#button_bus").hide(),
+            $cbs = $('#moving_bus').click(function() {
+                $submit.toggle( $cbs.is(":checked") );
+            });
+    
+        });
+  }
 
-      //No Option Selected, just clear the current marks
-      if (str == "") {
-        console.log("Clearing Marks..."); //clear marks
-      } else { 
+  function busStopped(){
+ 
+    if(document.getElementById("bus_stopped").checked == true){
 
-
-        /* Option "Bus Stops"
-        /* We use the recovered data from GFHS saved in Stops Model and
-        /* Then we use Lat and Long from each bus stop to create a marker for them */
-        if (str == "1"){
-          
-          var stops = $('#stops').data('stops');
+      //Just Fetch 1 Time
+      if(markersStop.length == 0){
+        var stops = $('#stops').data('stops');
 
           for(var i = 0; i < stops.length; i++){
               marker = 
                 {
                   coords:{lat:stops[i].stop_lat,lng:stops[i].stop_long},
-                  //content: If you wish, you could put bus ID or some stuff like that here.
+                  content: stops[i].stop_name
                 };
-              addMarker(marker);
+              addMarker(marker, markersStop);
               //console.log(i);
           }//end for
+      } else {
+        showMarkers(markersStop);
+      }
+    } else {
+      clearMarkers(markersStop);
+    }
 
-        } else { 
-        
-        /*Create a Mark for each moving bus and renders it in the map*/
+  }
 
-        console.log("Option 2 Selected");
-        get_all_bus_position();
+  function movingBus(){
+    if(document.getElementById("moving_bus").checked == true){
+      get_all_bus_position();
 
-        // Show Update Button
-        $("#optionsBus").change(function () {
-          $("#buttonBus").toggle(!isNaN(+$(this).val()));
-        });
-
-      } // end elsif
-    } // end else
-  } //end function busOptions
-
-
+    } else {
+      deleteMarkers(markersBus);
+    }
+  }
 
   /*GET Posicao return a json with the following content
   {
@@ -173,6 +184,15 @@
             var numBus = "";
             
             var horario = $.parseJSON(value.file_content);
+
+            if (horario == null){
+              alert('Ocorreu um erro ao retornar os ônibus em movimento. Tente novamente em alguns segundos');
+              return;
+            }
+            var loc = window.location.pathname;
+            var dir = loc.substring(0, loc.lastIndexOf('/'));
+
+            console.log(loc);
             for(i = 0; i < horario.l.length; i++){
               numBus = horario.l[i].c;
               for(j = 0; j < horario.l[i].vs.length; j++){
@@ -182,18 +202,19 @@
                 marker = 
                 {
                   coords:{lat: lat, lng:long},
-                  icon: 'https://fonts.googleapis.com/icon?family=directions_bus',
-                  content: numBus//content: If you wish, you could put bus ID or some stuff like that here.
+                  iconImage: "/assets/bus.png",
+                  content: numBus
                 };
-                addMarker(marker);
-                //console.log("I = " + i + " J = " + j);
-                }//end for j
-              } //end for i
+
+                addMarker(marker, markersBus);
+                
+              }//end for j
+            } //end for i
        
             
           },
           error: function () {
-            alert('error');
+            alert('Ocorreu um erro ao se conectar com a API SPTrans. Tente novamente em alguns minutos. Se o erro persistir, informe-nos');
           }
       }); 
     });
@@ -201,7 +222,7 @@
 
 
  // Add Marker Function
-  function addMarker(props){
+  function addMarker(props, markersArray){
     var marker = new google.maps.Marker({
       position:props.coords,
       map:map
@@ -238,17 +259,24 @@
 
  } //end function addmarker()
 
- function clearMarkers() {
-   setMapOnAll(null);
+
+ /*There is a small difference between just clearing the marks and DELETING them. When You CLEAR the marks, all
+  marks in the current map will become invisible, but will not be removed. When deleting the marks, they will be removed*/
+ function clearMarkers(markersArray) {
+   setMapOnAll(null, markersArray);
  }
 
- function deleteMarkers() {
-   clearMarkers();
+ function deleteMarkers(markersArray) {
+   setMapOnAll(null, markersArray);
    markersArray = [];
    
  }
 
-  function setMapOnAll(map) {
+ function showMarkers(markersArray) {
+   setMapOnAll(map, markersArray);
+ }
+
+  function setMapOnAll(map, markersArray) {
     //console.log("Delete Markers. Size = " + markersArray.length); //Debug code
     for (var i = 0; i < markersArray.length; i++) {
       markersArray[i].setMap(map);
@@ -256,11 +284,10 @@
   }
 
 
+  //Given a String, Search for the address if exists using google maps API.
   function searchAddress(){
     var input = document.getElementById('endereco');
     var searchBox = new google.maps.places.SearchBox(input);
-    
-    deleteMarkers();
 
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
@@ -271,9 +298,8 @@
         return;
       }
 
-      // Clear out the old markers.
-      deleteMarkers();
-
+      // Clear out the old marker.
+      deleteMarkers(searchMarkers);
       // For each place, get the icon, name and location.
       var bounds = new google.maps.LatLngBounds();
       places.forEach(function(place) {
@@ -290,7 +316,7 @@
         };
 
         // Create a marker for each place.
-        markersArray.push(new google.maps.Marker({
+        searchMarkers.push(new google.maps.Marker({
           map: map,
           icon: icon,
           title: place.name,
@@ -310,8 +336,10 @@
 
   }//end searchAddress Function
 
+
+  //When clicking button Update, calls this function.
   function updateBusPosition(){
-    deleteMarkers();
+    deleteMarkers(markersBus);
     get_all_bus_position();
   }
 
