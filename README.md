@@ -7,7 +7,7 @@ Nicolas Bacic Lima : 9277617
 
 Lucas de Sá : 9277534
 
-Gustavo : 
+Gustavo Oyama: 9845023
 
 # Informações Importantes
 Esse projeto foi desenvolvido utilizando a linguagem Ruby atráves de Rails. O código principal, entretanto, deve ser conferido no arquivo map.js que pode ser localizado no caminho app/assets/javascripts
