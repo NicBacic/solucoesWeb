@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <%= stylesheet_link_tag "home" %>
+
     <style>
        #map {
         height: 400px;
@@ -9,18 +11,29 @@
     </style>
   </head>
 
-
   <body>
     <%= csrf_meta_tags %>
     <h2>Endereço</h2>
-    <div id = "search">
+    <div id = "searchBar">
         <input id="endereco" class="controls" type="text" placeholder="Digite o endereço aqui" onKeyPress="searchAddress()">
     </div>
 
+
+    <div id = "boxes">
     <form action="">
-      <input type="checkbox" id= "moving_bus" name= "sptrans" value="1" onclick= "movingBus()">Ônibus em Movimento<br>
-      <input type="checkbox" id= "bus_stopped" name="sptrans" value="2" onClick= "busStopped()">Parada de Ônibus
+      <input type="checkbox" id= "moving_bus" name= "sptrans" value="1" onclick= "movingBus()">
+      <span class="checkboxtext">
+        Onibus em movimento
+      </span>
+
+      <input type="checkbox" id= "bus_stopped" name="sptrans" value="2" onClick= "busStopped()">
+
+      <span class="checkboxtext">
+        Parada de onibus
+      </span>
+
     </form>
+    </div>
 
     <%= content_tag "div", id: "stops", data: {stops: Stop.all} do %>
     <% end %>
@@ -34,6 +47,14 @@
       </script>
 
     <input name="updateBusPosition" type='submit' id="button_bus" value='Atualizar' onclick = "updateBusPosition()" />
+
+    <br>
+    <br>
+
+    <h3>Feito por:</h3>
+    <h4>Nicolas Bacic - 9277617<h4>
+    <h4>Lucas de Sá - 9277534<h4>
+    <h4>Gustavo Oyama - 9845023<h4>
 
   </body>
 </html>
