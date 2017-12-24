@@ -1,0 +1,24 @@
+h2 {
+  font-weight: bold;
+  font-size: 28;
+}
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.1); /* IE */
+  -moz-transform: scale(1.1); /* FF */
+  -webkit-transform: scale(1.1); /* Safari and Chrome */
+  -o-transform: scale(1.1); /* Opera */
+  padding: 30px;
+}
+
+.checkboxtext
+{
+  font-size: 110%;
+  display: inline;
+}
+
+input[type=text] {
+   width: 300px;
+}
